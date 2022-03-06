@@ -1,0 +1,36 @@
+﻿@inherits LayoutComponentBase
+
+<PageTitle>LMS.UI</PageTitle>
+
+@code{ 
+
+    [CascadingParameter] protected Task<AuthenticationState> AuthStat { get; set; }
+    [Inject] private IConfiguration Config { get; set; }
+    [Inject] protected NavigationManager NavigationManager { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        base.OnInitialized();
+        //var user = (await AuthStat).User;
+        //if(!user.Identity.IsAuthenticated)
+        //{
+        //    NavigationManager.NavigateTo(Config["InteractiveServiceSettings:AuthorityUrl"] + $"/Account/login?returnUrl={Uri.EscapeDataString(Config["applicationUrl"])}");
+        //}
+    }
+}
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
