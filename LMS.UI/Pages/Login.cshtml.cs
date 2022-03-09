@@ -9,9 +9,14 @@ namespace LMS.UI.Pages
     {
         public async Task<IActionResult> OnGetAsync(string redirectUri)
         {
+            Console.WriteLine("LoginModel");
+            Console.WriteLine(redirectUri);
             if (string.IsNullOrWhiteSpace(redirectUri))
             {
                 redirectUri = Url.Content("~/");
+                
+                Console.WriteLine("updated redirectUri");
+                Console.WriteLine(redirectUri);
             }
 
             if (HttpContext.User.Identity.IsAuthenticated)
