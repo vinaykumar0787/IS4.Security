@@ -15,7 +15,8 @@ builder.Services.AddHttpClient();
 
 builder.Services.Configure<IdentityServerSettings>(builder.Configuration.GetSection("IdentityServerSettings"));
 builder.Services.AddScoped<ITokenService, TokenService>();
-
+Console.WriteLine("Authority");
+Console.WriteLine(builder.Configuration["InteractiveServiceSettings:AuthorityUrl"]);
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -60,3 +61,4 @@ app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
 app.Run();
+Console.WriteLine("Application Started....");

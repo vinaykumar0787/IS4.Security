@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace IdentityServerHost.Quickstart.UI
@@ -35,13 +36,15 @@ namespace IdentityServerHost.Quickstart.UI
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public AccountController(
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IAuthenticationSchemeProvider schemeProvider,
             IEventService events,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager,
+            UserManager<ApplicationUser> userManager)
         {
 
             _interaction = interaction;
@@ -49,6 +52,7 @@ namespace IdentityServerHost.Quickstart.UI
             _schemeProvider = schemeProvider;
             _events = events;
             _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -182,7 +186,40 @@ namespace IdentityServerHost.Quickstart.UI
             return View(vm);
         }
 
-        
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            var user = new ApplicationUser
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                EmailConfirmed = true,
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (!result.Succeeded)
+            {
+                throw new Exception(result.Errors.First().Description);
+            }
+
+            result = await _userManager.AddClaimsAsync(user, new Claim[]{
+                            new Claim(JwtClaimTypes.Email, model.Email)
+                        });
+
+            if (!result.Succeeded)
+            {
+                throw new Exception(result.Errors.First().Description);
+            }
+
+            return View("RegistrationSuccess");
+        }
         /// <summary>
         /// Show logout page
         /// </summary>
