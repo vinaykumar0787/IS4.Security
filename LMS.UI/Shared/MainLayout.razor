@@ -4,9 +4,12 @@
 
 @code{ 
 
-    [CascadingParameter] protected Task<AuthenticationState> AuthStat { get; set; }
-    [Inject] private IConfiguration Config { get; set; }
-    [Inject] protected NavigationManager NavigationManager { get; set; }
+    [CascadingParameter] 
+    protected Task<AuthenticationState> AuthStat { get; set; }
+    [Inject]
+    private IConfiguration Config { get; set; }
+    [Inject]
+    protected NavigationManager NavigationManager { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
